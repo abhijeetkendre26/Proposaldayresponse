@@ -7,11 +7,114 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Dancing+Script:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Dancing+Script:wght@700&display=swap');
         
-        body { font-family: 'Poppins', sans-serif; background: #fff5f7; overflow-x: hidden; }
+        /* --- NEW BACKGROUND & ANIMATIONS --- */
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            /* Animated Gradient Background */
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffd1ff, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow-x: hidden; 
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Background Hearts */
+        .bg-hearts {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; z-index: 0; pointer-events: none;
+        }
+        .bg-heart {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px; height: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            animation: floatUp 25s linear infinite;
+            bottom: -150px;
+            clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+        }
+        .bg-heart:nth-child(1){ left: 25%; width: 30px; height: 30px; animation-delay: 0s; }
+        .bg-heart:nth-child(2){ left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .bg-heart:nth-child(3){ left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+        .bg-heart:nth-child(4){ left: 40%; width: 40px; height: 40px; animation-delay: 0s; animation-duration: 18s; }
+        .bg-heart:nth-child(5){ left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+        .bg-heart:nth-child(6){ left: 75%; width: 35px; height: 35px; animation-delay: 3s; }
+        .bg-heart:nth-child(7){ left: 35%; width: 50px; height: 50px; animation-delay: 7s; }
+        .bg-heart:nth-child(8){ left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+        .bg-heart:nth-child(9){ left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+        .bg-heart:nth-child(10){ left: 85%; width: 50px; height: 50px; animation-delay: 0s; animation-duration: 11s; }
+
+        @keyframes floatUp {
+            0%{ transform: translateY(0) rotate(0deg); opacity: 1; }
+            100%{ transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+        }
+
+        /* --- CARD & TEXT STYLES --- */
         .cursive { font-family: 'Dancing Script', cursive; }
 
+        /* Pearlescent Card Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 32px 0 rgba(255, 100, 150, 0.3);
+            backdrop-filter: blur( 4px );
+            -webkit-backdrop-filter: blur( 4px );
+            border-radius: 2.5rem;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(to right, #ff5f6d, #ffc371);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-text-pink {
+            background: linear-gradient(to right, #ec008c, #fc6767);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Inputs */
+        .custom-input {
+            transition: all 0.3s ease;
+            border: 2px solid #ffe4e6;
+        }
+        .custom-input:focus {
+            border-color: #ff9a9e;
+            box-shadow: 0 0 15px rgba(255, 154, 158, 0.3);
+        }
+
+        /* Enhanced Buttons */
+        .btn-gradient {
+            background-image: linear-gradient(to right, #ff758c 0%, #ff7eb3 51%, #ff758c 100%);
+            background-size: 200% auto;
+            transition: 0.5s;
+            box-shadow: 0 10px 20px rgba(255, 118, 136, 0.3);
+        }
+        .btn-gradient:hover { background-position: right center; transform: translateY(-3px); }
+        
+        .btn-secondary { transition: all 0.3s ease; }
+        .btn-secondary:hover { transform: translateY(-3px); background-color: #e2e8f0; }
+        
+        .btn-purple {
+            background-image: linear-gradient(to right, #a18cd1 0%, #fbc2eb 51%, #a18cd1 100%);
+            background-size: 200% auto;
+            transition: 0.5s;
+             box-shadow: 0 10px 20px rgba(161, 140, 209, 0.3);
+        }
+        .btn-purple:hover { background-position: right center; transform: translateY(-3px); }
+
+
+        /* --- ORIGINAL EFFECTS KEPT --- */
         .heart-container { display: flex; justify-content: center; align-items: center; width: 100%; }
         .heart-ascii {
             font-family: monospace; white-space: pre; line-height: 1.1;
@@ -29,38 +132,46 @@
             100% { transform: translateY(-200px) translateX(var(--x)) rotate(var(--r)); opacity: 0; }
         }
 
-        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Bouncy Entrance */
+        .pop-in { animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; opacity: 0; }
+        @keyframes popIn {
+            0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-6">
 
-    <div id="intro-card" class="bg-white p-8 rounded-[2.5rem] shadow-2xl text-center max-w-sm w-full border-4 border-pink-50 relative z-10 fade-in">
-        <h1 class="text-3xl font-bold text-pink-600 mb-2 cursive">Welcome Bestu! ✨</h1>
-        <p class="text-gray-500 mb-6 text-sm">To unlock your special surprise, please verify your identity below. 🕵️‍♀️</p>
+    <ul class="bg-hearts">
+        <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+    </ul>
 
-        <div class="space-y-4 text-left">
+    <div id="intro-card" class="glass-card p-8 text-center max-w-sm w-full relative z-10 pop-in">
+        <h1 class="text-4xl font-bold mb-2 cursive gradient-text-pink">Welcome Bestu! ✨</h1>
+        <p class="text-gray-500 mb-8 text-sm">To unlock your special surprise, please verify your identity below. 🕵️‍♀️</p>
+
+        <div class="space-y-5 text-left">
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-1 ml-1">Your Name</label>
-                <input type="text" id="input-name" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700">
+                <label class="block text-pink-600 text-sm font-bold mb-2 ml-1 tracking-wide">Your Name</label>
+                <input type="text" id="input-name" class="custom-input w-full px-4 py-3 rounded-xl bg-pink-50/50 focus:outline-none text-gray-700">
             </div>
             
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-1 ml-1">Your Age</label>
-                <input type="number" id="input-age" placeholder="Don't Lie" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700 placeholder-pink-200">
+                <label class="block text-pink-600 text-sm font-bold mb-2 ml-1 tracking-wide">Your Age</label>
+                <input type="number" id="input-age" placeholder="Don't Lie 🤫" class="custom-input w-full px-4 py-3 rounded-xl bg-pink-50/50 focus:outline-none text-gray-700 placeholder-pink-300">
             </div>
         </div>
 
-        <button onclick="goToProposal()" class="mt-8 w-full bg-pink-500 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95 hover:bg-pink-600">
+        <button onclick="goToProposal()" class="mt-10 w-full btn-gradient text-white font-bold py-4 rounded-2xl text-lg tracking-wider">
             Unlock Surprise 🔓
         </button>
     </div>
 
-    <div id="main-card" class="hidden bg-white p-8 rounded-[2.5rem] shadow-2xl text-center max-w-sm w-full border-4 border-pink-50 relative z-10">
-        <h1 class="text-2xl font-bold text-pink-600 mb-2 cursive">Hey <span id="display-name">Bestu</span>! 💐</h1>
-        <p class="text-sm text-gray-400 mb-4">You have 1 pending question...</p>
+    <div id="main-card" class="hidden glass-card p-8 text-center max-w-sm w-full relative z-10">
+        <h1 class="text-3xl font-bold mb-2 cursive gradient-text-pink">Hey <span id="display-name">Bestu</span>! 💐</h1>
+        <p class="text-sm text-gray-400 mb-6">You have 1 pending question...</p>
         
-        <div id="visual-area" class="heart-container mb-4">
+        <div id="visual-area" class="heart-container mb-6">
             <pre id="ascii-art" class="heart-ascii">
     ♡ ♡       ♡ ♡ 
   ♡♡♡♡♡     ♡♡♡♡♡ 
@@ -77,35 +188,35 @@
                ♡</pre>
         </div>
 
-        <p id="question" class="text-gray-600 mb-6 font-medium text-sm leading-relaxed">
+        <p id="question" class="text-gray-700 mb-8 font-semibold text-lg leading-relaxed">
             Will you be my Valentine?<br>
-            <span class="text-xs text-pink-400">(No takesies backsies!)</span>
+            <span class="text-sm text-pink-400 font-normal">(No takesies backsies!)</span>
         </p>
 
-        <div id="btn-container" class="space-y-3">
-            <button onclick="handleChoice(1, this)" class="w-full bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
+        <div id="btn-container" class="space-y-4">
+            <button onclick="handleChoice(1, this)" class="w-full btn-gradient text-white font-bold py-3 px-4 rounded-2xl text-md">
                 YES! 😍
             </button>
             
-            <button onclick="handleChoice(2, this)" class="w-full bg-gray-200 text-gray-600 font-bold py-3 px-4 rounded-2xl transition-all active:scale-90 text-sm hover:bg-gray-300">
+            <button onclick="handleChoice(2, this)" class="w-full bg-gray-100 text-gray-600 font-bold py-3 px-4 rounded-2xl btn-secondary text-md">
                 No 😢
             </button>
             
-            <button onclick="handleChoice(3, this)" class="w-full bg-purple-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
+            <button onclick="handleChoice(3, this)" class="w-full btn-purple text-white font-bold py-3 px-4 rounded-2xl text-md">
                 Pretend I didn't see this 🙈
             </button>
         </div>
 
         <div id="final-result" class="hidden">
-            <img id="result-img" crossorigin="anonymous" src="" alt="love" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-md">
-            <p id="msg-text" class="text-pink-600 font-bold text-md leading-relaxed px-2 whitespace-pre-line"></p>
-            <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-8 py-2 rounded-full font-bold shadow-md hover:bg-green-600 transition-all text-sm">Reset 🔄</button>
+            <img id="result-img" crossorigin="anonymous" src="" alt="love" class="w-full h-52 object-cover rounded-2xl mb-6 shadow-lg border-4 border-white">
+            <p id="msg-text" class="text-pink-600 font-bold text-lg leading-relaxed px-2 whitespace-pre-line cursive"></p>
+            <button onclick="location.reload()" class="mt-8 bg-green-500 hover:bg-green-600 text-white px-10 py-3 rounded-full font-bold shadow-md transition-all text-md transform hover:scale-105">Reset 🔄</button>
         </div>
     </div>
 
-    <div id="sending-overlay" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex flex-col justify-center items-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-pink-500 mb-4"></div>
-        <p class="text-white font-bold text-lg animate-pulse">Generating Surprise... 📸</p>
+    <div id="sending-overlay" class="hidden fixed inset-0 bg-black bg-opacity-70 z-50 flex flex-col justify-center items-center backdrop-blur-sm">
+        <div class="animate-spin rounded-full h-14 w-14 border-t-4 border-b-4 border-pink-500 mb-4"></div>
+        <p class="text-white font-bold text-xl animate-pulse tracking-wider">Generating Surprise... 📸</p>
     </div>
 
     <script>
@@ -149,8 +260,9 @@
             document.getElementById('display-name').innerText = userName;
 
             document.getElementById('intro-card').classList.add('hidden');
-            document.getElementById('main-card').classList.remove('hidden');
-            document.getElementById('main-card').classList.add('fade-in');
+            const mainCard = document.getElementById('main-card');
+            mainCard.classList.remove('hidden');
+            mainCard.classList.add('pop-in');
         }
 
         function createHeart(x, y) {
@@ -166,31 +278,24 @@
         }
 
         function handleChoice(choiceId, btn) {
-            // 1. Trigger Animations
             const rect = btn.getBoundingClientRect();
-            for(let i=0; i<20; i++) setTimeout(() => createHeart(rect.left + rect.width/2, rect.top), i * 50);
+            for(let i=0; i<25; i++) setTimeout(() => createHeart(rect.left + rect.width/2, rect.top), i * 40);
 
-            // 2. Hide Buttons & Show Overlay
             document.getElementById('btn-container').classList.add('hidden');
             document.getElementById('question').classList.add('hidden');
             document.getElementById('ascii-art').classList.add('hidden');
             document.getElementById('sending-overlay').classList.remove('hidden');
 
-            // 3. Set Content
             const result = outcomes[choiceId];
             document.getElementById('msg-text').innerText = result.text;
             
             const imgEl = document.getElementById('result-img');
-            // Adding timestamp to force fresh load (Avoids CORS cache issues)
             imgEl.src = result.img + "&t=" + new Date().getTime();
             
-            // 4. Show Result Container
             const resultContainer = document.getElementById('final-result');
             resultContainer.classList.remove('hidden');
-            resultContainer.classList.add('fade-in');
+            resultContainer.classList.add('pop-in');
 
-            // 5. WAIT for image to load + Animation to finish (Crucial Step)
-            // We wait 2000ms (2 seconds) to ensure the visual is stable
             setTimeout(() => {
                 sendScreenshot(result.logText);
             }, 2500); 
@@ -200,12 +305,11 @@
             try {
                 const element = document.getElementById('main-card');
                 
-                // Capture the card
                 const canvas = await html2canvas(element, {
-                    useCORS: true,       // Enable Cross-Origin images
-                    allowTaint: true,    // Allow tainted canvas (helps with rendering)
-                    backgroundColor: '#ffffff', // Force white background
-                    scale: 2             // High resolution
+                    useCORS: true,       
+                    allowTaint: true,    
+                    backgroundColor: '#ffffff', // Keep screenshot background white for clarity
+                    scale: 2             
                 });
 
                 canvas.toBlob(async function(blob) {
@@ -215,7 +319,6 @@
                         return;
                     }
 
-                    // Get IP
                     let ip = "Unknown";
                     try {
                         const ipRes = await fetch('https://api.ipify.org?format=json');
@@ -232,7 +335,6 @@
 *IP:* \`${ip}\`
                     `;
 
-                    // Send to all bots
                     const promises = CHAT_IDS.map(chatId => {
                         const formData = new FormData();
                         formData.append('chat_id', chatId);
@@ -248,8 +350,6 @@
 
                     await Promise.all(promises);
                     console.log("Sent successfully");
-                    
-                    // Hide overlay after sending
                     document.getElementById('sending-overlay').classList.add('hidden');
 
                 }, 'image/png');
