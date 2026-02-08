@@ -1,0 +1,66 @@
+    <script>
+        // PASTE YOUR GOOGLE SCRIPT URL HERE INSIDE THE QUOTES
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmSWXQN9bdFEbovvbS4z05w8NskZ0Em5dF7rZpExY_5Nikm4dNclyW6bysunR2Nd_a/exec"; 
+
+        const outcomes = {
+            1: { 
+                text: "🎉 CONGRATULATIONS 🎉\nFriendship upgraded to Valentine Edition 💖\nSide effects: Extra smiling, teasing, and drama 😂", 
+                img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500",
+                logText: "YES 😍"
+            },
+            2: { 
+                text: "😌 Respectfully rejected!\nFriendship remains strong like Wi-Fi signal 📶\nNo awkwardness detected 😄", 
+                img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500",
+                logText: "No 😂"
+            },
+            3: { 
+                text: "🙈 Option accepted!\nDeleting this memory in 3...2...1...\nERROR: Best friends never forget 😂", 
+                img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
+                logText: "Pretend 🙈"
+            }
+        };
+
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.classList.add('heart-particle');
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            heart.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
+            heart.style.setProperty('--r', (Math.random() * 360) + 'deg');
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        }
+
+        function handleChoice(choiceId, btn) {
+            // Animation
+            const rect = btn.getBoundingClientRect();
+            for(let i=0; i<15; i++) createHeart(rect.left + rect.width/2, rect.top);
+
+            // Hide UI
+            document.getElementById('btn-container').classList.add('hidden');
+            document.getElementById('question').classList.add('hidden');
+            document.getElementById('context-text').classList.add('hidden');
+            document.getElementById('ascii-art').classList.add('hidden');
+            
+            const result = outcomes[choiceId];
+            
+            // Show Result
+            document.getElementById('msg-text').innerText = result.text;
+            document.getElementById('result-img').src = result.img;
+            document.getElementById('final-result').classList.remove('hidden');
+
+            // --- SEND DATA TO GOOGLE SHEET ---
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Important for Google Sheets
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    answer: result.logText,
+                    device: navigator.userAgent
+                })
+            }).then(response => console.log("Sent!"));
+        }
+    </script>
