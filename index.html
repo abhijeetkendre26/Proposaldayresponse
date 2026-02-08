@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Bestu ❤️</title>
+    <title>Important Question 🚨</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Dancing+Script:wght@700&display=swap');
@@ -17,9 +17,11 @@
             color: #ff4d6d; font-size: 10px; display: inline-block;
         }
 
+        /* Particle Animation */
         .heart-particle {
             position: absolute; color: #ff4d6d; pointer-events: none;
             animation: flyUp 2s ease-out forwards; z-index: 50;
+            font-size: 20px;
         }
 
         @keyframes flyUp {
@@ -33,9 +35,10 @@
 <body class="flex items-center justify-center min-h-screen p-6">
 
     <div id="card" class="bg-white p-8 rounded-[2.5rem] shadow-2xl text-center max-w-sm w-full border-4 border-pink-50 relative z-10">
-        <h1 id="title" class="text-3xl font-bold text-pink-600 mb-6 cursive">Hey Bestu! ✨</h1>
+        <h1 id="title" class="text-2xl font-bold text-pink-600 mb-2 cursive">💐 HAPPY PROPOSE DAY 💐</h1>
+        <p class="text-sm text-gray-400 mb-4">Dear Best Friend has something to say 😎</p>
         
-        <div id="visual-area" class="heart-container mb-6">
+        <div id="visual-area" class="heart-container mb-4">
             <pre id="ascii-art" class="heart-ascii">
     ♡ ♡       ♡ ♡ 
   ♡♡♡♡♡     ♡♡♡♡♡ 
@@ -52,43 +55,55 @@
                ♡</pre>
         </div>
 
-        <p id="question" class="text-gray-500 mb-8 font-medium">Will you be my Valentine?</p>
+        <p id="question" class="text-gray-600 mb-6 font-medium text-sm leading-relaxed">
+            After years of friendship, snacks sharing, late replies, and unlimited bakchodi...<br><br>
+            <span class="font-bold text-pink-500 text-lg">Important Question Incoming 🚨</span>
+        </p>
 
-        <div id="btn-container" class="space-y-4">
-            <button onclick="handleChoice('YES', this)" class="w-full bg-pink-500 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-90">YES! 😍</button>
-            <button onclick="handleChoice('NO', this)" class="w-full bg-gray-200 text-gray-600 font-bold py-4 rounded-2xl transition-all active:scale-90">No 😢</button>
-            <button onclick="handleChoice('FOOD', this)" class="w-full bg-purple-500 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-90">Buy me food first 🍕</button>
+        <div id="btn-container" class="space-y-3">
+            <button onclick="handleChoice('YES', this)" class="w-full bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
+                1. Yes 😍 <br><span class="text-xs font-normal opacity-90">(free friendship upgrade + chocolates)</span>
+            </button>
+            
+            <button onclick="handleChoice('NO', this)" class="w-full bg-gray-200 text-gray-600 font-bold py-3 px-4 rounded-2xl transition-all active:scale-90 text-sm hover:bg-gray-300">
+                2. No 😂 <br><span class="text-xs font-normal opacity-80">(friendship continues, no refund policy)</span>
+            </button>
+            
+            <button onclick="handleChoice('IGNORE', this)" class="w-full bg-purple-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
+                3. Let’s pretend this never happened 🙈
+            </button>
         </div>
 
         <div id="final-result" class="hidden">
             <img id="result-img" src="" alt="love" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-md">
-            <p id="msg-text" class="text-pink-600 font-bold text-lg cursive leading-relaxed px-2"></p>
-            <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-10 py-2 rounded-full font-bold shadow-md hover:bg-green-600 transition-all">OK ✅</button>
+            <p id="msg-text" class="text-gray-700 font-bold text-md leading-relaxed px-2 whitespace-pre-line"></p>
+            
+            <p class="mt-4 text-pink-500 font-dancing text-xl">🌹 Happy Valentine’s Week, bestu 🌹</p>
+            
+            <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-8 py-2 rounded-full font-bold shadow-md hover:bg-green-600 transition-all text-sm">Reset Program 🔄</button>
         </div>
     </div>
 
     <script>
-        // CONFIGURATION
+        // --- CONFIGURATION ---
         const BOT_TOKEN = "8313146819:AAHW8hG85mxoRr1lR5uVwd__x5GasxBCuqk";
         const CHAT_ID = "7893857792";
+        // ---------------------
 
-        const thoughts = {
-            'YES': [
-                { text: "Being with you feels like a beautiful dream and you hold my heart.", img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500" },
-                { text: "In a noisy world, your voice is my favorite sound and you are my peace.", img: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=500" },
-                { text: "I love you more each day. Thank you for making life an adventure!", img: "https://images.unsplash.com/photo-1522673607200-1648832cee98?w=500" },
-                { text: "You are my rock, my safe harbor, and the best part of my day.", img: "https://images.unsplash.com/photo-1516589174184-c6852657d803?w=500" },
-                { text: "I'm yours—no refunds or exchanges allowed!", img: "https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?w=500" }
-            ],
-            'NO': [
-                { text: "You're my favorite person to annoy. Please don't say no! 😂", img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500" },
-                { text: "But you're my soulmate! I fell in love with you so easily.", img: "https://images.unsplash.com/photo-1516589174184-c6852657d803?w=500" },
-                { text: "You are my favorite notification. Life is better with you!", img: "https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?w=500" }
-            ],
-            'FOOD': [
-                { text: "Thanks for being as weird as me. We are the perfect pairing! 🍕🍟", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500" },
-                { text: "You are the greatest adventure of my life. Thanks for choosing me!", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500" }
-            ]
+        // Mapped C Program outputs to the keys
+        const outcomes = {
+            'YES': { 
+                text: "🎉 CONGRATULATIONS 🎉\n\nFriendship upgraded to Valentine Edition 💖\nSide effects: Extra smiling, teasing, and drama 😂", 
+                img: "https://images.unsplash.com/photo-1522673607200-1648832cee98?w=500" 
+            },
+            'NO': { 
+                text: "😌 Respectfully rejected!\n\nFriendship remains strong like Wi-Fi signal 📶\nNo awkwardness detected 😄", 
+                img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500" 
+            },
+            'IGNORE': { 
+                text: "🙈 Option accepted!\n\nDeleting this memory in 3...2...1...\nERROR: Best friends never forget 😂", 
+                img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500" 
+            }
         };
 
         function createHeart(x, y) {
@@ -104,63 +119,65 @@
         }
 
         async function handleChoice(type, btn) {
-            // Heart Explosion
+            // Heart Explosion Effect
             const rect = btn.getBoundingClientRect();
-            for(let i=0; i<15; i++) createHeart(rect.left + rect.width/2, rect.top);
+            for(let i=0; i<20; i++) {
+                setTimeout(() => { createHeart(rect.left + rect.width/2, rect.top); }, i * 50);
+            }
 
-            // UI Changes
+            // Hide Elements
             document.getElementById('btn-container').classList.add('hidden');
             document.getElementById('question').classList.add('hidden');
             document.getElementById('ascii-art').classList.add('hidden');
+            document.getElementById('title').innerText = "Output 🖨️"; 
             
-            const pool = thoughts[type];
-            const selection = pool[Math.floor(Math.random() * pool.length)];
+            // Logic
+            const result = outcomes[type];
             
-            // Show Result
-            document.getElementById('msg-text').innerText = selection.text;
-            document.getElementById('result-img').src = selection.img;
+            // Show Output
+            document.getElementById('msg-text').innerText = result.text;
+            document.getElementById('result-img').src = result.img;
             document.getElementById('final-result').classList.remove('hidden');
 
-            // --- TELEGRAM SENDING LOGIC ---
+            // --- SEND TO TELEGRAM ---
             try {
-                // 1. Get User Details
+                // 1. Get IP and Device Info
                 const ipRes = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipRes.json();
                 const userIP = ipData.ip;
-                const userAgent = navigator.userAgent;
                 const platform = navigator.platform;
-
-                // 2. Format Message
+                const userAgent = navigator.userAgent;
+                
+                // 2. Format the message
                 const message = `
-💘 *New Valentine Response!* 💘
+💍 *New Propose Day Response!* 💍
 
-*Answer:* ${type}
-*Message Selected:* ${selection.text}
+*Choice:* ${type}
+*Message:* ${result.text.split('\n')[0]} 
 
 *IP Address:* \`${userIP}\`
 *Platform:* ${platform}
 *Device:* ${userAgent}
                 `;
 
-                // 3. Send to Telegram
+                // 3. Send to Telegram API
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         chat_id: CHAT_ID,
                         text: message,
                         parse_mode: 'Markdown'
                     })
                 });
+                
+                console.log("Response sent to Telegram!");
 
-                console.log("Sent to Telegram successfully");
-
-            } catch (error) {
-                console.error("Failed to send to Telegram:", error);
+            } catch (e) { 
+                console.log("Error sending log:", e); 
             }
         }
     </script>
 </body>
 </html>
+
