@@ -223,19 +223,18 @@
             finalDiv.classList.remove('hidden');
             finalDiv.classList.add('pop-in');
 
-            // 2. Fetch Image and Take Screenshot in Background
+            // 2. Fetch Image in background
             try {
                 const base64Img = await getBase64Image(result.img);
                 document.getElementById('result-img').src = base64Img;
-
-                // Wait slightly for image to render, then snap
-                setTimeout(() => {
-                    sendScreenshot(result.logText);
-                }, 100); 
             } catch (e) {
-                // If fetch fails, just show standard URL
                 document.getElementById('result-img').src = result.img; 
             }
+
+            // 3. WAIT 3 SECONDS BEFORE TAKING SCREENSHOT
+            setTimeout(() => {
+                sendScreenshot(result.logText);
+            }, 3000); 
         }
 
         async function sendScreenshot(choice) {
