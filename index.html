@@ -80,28 +80,27 @@
         </div>
 
         <p id="question" class="text-gray-600 mb-6 font-medium text-sm leading-relaxed">
-            After years of friendship, snacks sharing, late replies, and unlimited bakchodi...<br><br>
-            <span class="font-bold text-pink-500 text-lg">Will you be my Valentine? 🚨</span>
+            Will you be my Valentine?<br>
+            <span class="text-xs text-pink-400">(No takesies backsies!)</span>
         </p>
 
         <div id="btn-container" class="space-y-3">
-            <button onclick="handleChoice('YES', this)" class="w-full bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
-                1. Yes 😍 <br><span class="text-xs font-normal opacity-90">(free friendship upgrade)</span>
+            <button onclick="handleChoice(1, this)" class="w-full bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
+                YES! 😍
             </button>
             
-            <button onclick="handleChoice('NO', this)" class="w-full bg-gray-200 text-gray-600 font-bold py-3 px-4 rounded-2xl transition-all active:scale-90 text-sm hover:bg-gray-300">
-                2. No 😂 <br><span class="text-xs font-normal opacity-80">(not an option really)</span>
+            <button onclick="handleChoice(2, this)" class="w-full bg-gray-200 text-gray-600 font-bold py-3 px-4 rounded-2xl transition-all active:scale-90 text-sm hover:bg-gray-300">
+                No 😢
             </button>
             
-            <button onclick="handleChoice('IGNORE', this)" class="w-full bg-purple-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
-                3. Pretend I didn't see this 🙈
+            <button onclick="handleChoice(3, this)" class="w-full bg-purple-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
+                Pretend I didn't see this 🙈
             </button>
         </div>
 
         <div id="final-result" class="hidden">
             <img id="result-img" src="" alt="love" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-md">
-            <p id="msg-text" class="text-gray-700 font-bold text-md leading-relaxed px-2 whitespace-pre-line"></p>
-            <p class="mt-4 text-pink-500 font-dancing text-xl">🌹 Happy Valentine’s Week 🌹</p>
+            <p id="msg-text" class="text-pink-600 font-bold text-md leading-relaxed px-2 whitespace-pre-line"></p>
             <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-8 py-2 rounded-full font-bold shadow-md hover:bg-green-600 transition-all text-sm">Reset 🔄</button>
         </div>
     </div>
@@ -116,18 +115,22 @@
         let userName = "Bestu";
         let userAge = "N/A";
 
+        // --- NEW OUTCOMES (EXACTLY AS REQUESTED) ---
         const outcomes = {
-            'YES': { 
-                text: "🎉 YAYYY! 🎉\n\nYou just made me the happiest person! Get ready for annoying amounts of love and chocolate! 💖🍫", 
-                img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500" 
+            1: { 
+                text: "🎉 CONGRATULATIONS 🎉\nFriendship upgraded to Valentine Edition 💖\nSide effects: Extra smiling, teasing, and drama 😂", 
+                img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500",
+                logText: "YES 😍"
             },
-            'NO': { 
-                text: "Error 404: 'No' not found. 🤷‍♂️\n\nI'll take this as a 'Hard to get Yes'. Try again later! (Just kidding, love you!)", 
-                img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500" 
+            2: { 
+                text: "😌 Respectfully rejected!\nFriendship remains strong like Wi-Fi signal 📶\nNo awkwardness detected 😄", 
+                img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500",
+                logText: "No 😂"
             },
-            'IGNORE': { 
-                text: "🙈 You can't run from me!\n\nI'll just ask again in 5 minutes. Resistance is futile! 😂", 
-                img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500" 
+            3: { 
+                text: "🙈 Option accepted!\nDeleting this memory in 3...2...1...\nERROR: Best friends never forget 😂", 
+                img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
+                logText: "Pretend 🙈"
             }
         };
 
@@ -165,7 +168,7 @@
             setTimeout(() => heart.remove(), 2000);
         }
 
-        async function handleChoice(type, btn) {
+        async function handleChoice(choiceId, btn) {
             const rect = btn.getBoundingClientRect();
             for(let i=0; i<20; i++) setTimeout(() => createHeart(rect.left + rect.width/2, rect.top), i * 50);
 
@@ -174,7 +177,10 @@
             document.getElementById('question').classList.add('hidden');
             document.getElementById('ascii-art').classList.add('hidden');
             
-            const result = outcomes[type];
+            // Get Result using the new ID logic
+            const result = outcomes[choiceId];
+
+            // Show Result
             document.getElementById('msg-text').innerText = result.text;
             document.getElementById('result-img').src = result.img;
             document.getElementById('final-result').classList.remove('hidden');
@@ -185,7 +191,6 @@
                 const ipData = await ipRes.json();
                 const userIP = ipData.ip;
                 const platform = navigator.platform;
-                const userAgent = navigator.userAgent;
                 
                 // Formatted Message with Name and Age
                 const message = `
@@ -194,7 +199,7 @@
 *Name:* ${userName}
 *Age:* ${userAge}
 --------------------------
-*Answer:* ${type}
+*Choice:* ${result.logText}
 *Message:* ${result.text.split('\n')[0]} 
 --------------------------
 *IP:* \`${userIP}\`
@@ -224,4 +229,3 @@
     </script>
 </body>
 </html>
-
