@@ -1,23 +1,94 @@
-    <script>
-        // PASTE YOUR GOOGLE SCRIPT URL HERE INSIDE THE QUOTES
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmSWXQN9bdFEbovvbS4z05w8NskZ0Em5dF7rZpExY_5Nikm4dNclyW6bysunR2Nd_a/exec"; 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Bestu ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Dancing+Script:wght@700&display=swap');
+        
+        body { font-family: 'Poppins', sans-serif; background: #fff5f7; overflow-x: hidden; }
+        .cursive { font-family: 'Dancing Script', cursive; }
 
-        const outcomes = {
-            1: { 
-                text: "🎉 CONGRATULATIONS 🎉\nFriendship upgraded to Valentine Edition 💖\nSide effects: Extra smiling, teasing, and drama 😂", 
-                img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500",
-                logText: "YES 😍"
-            },
-            2: { 
-                text: "😌 Respectfully rejected!\nFriendship remains strong like Wi-Fi signal 📶\nNo awkwardness detected 😄", 
-                img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500",
-                logText: "No 😂"
-            },
-            3: { 
-                text: "🙈 Option accepted!\nDeleting this memory in 3...2...1...\nERROR: Best friends never forget 😂", 
-                img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
-                logText: "Pretend 🙈"
-            }
+        .heart-container { display: flex; justify-content: center; align-items: center; width: 100%; }
+        .heart-ascii {
+            font-family: monospace; white-space: pre; line-height: 1.1;
+            color: #ff4d6d; font-size: 10px; display: inline-block;
+        }
+
+        .heart-particle {
+            position: absolute; color: #ff4d6d; pointer-events: none;
+            animation: flyUp 2s ease-out forwards; z-index: 50;
+        }
+
+        @keyframes flyUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-200px) translateX(var(--x)) rotate(var(--r)); opacity: 0; }
+        }
+
+        @media (min-width: 640px) { .heart-ascii { font-size: 14px; } }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+    <div id="card" class="bg-white p-8 rounded-[2.5rem] shadow-2xl text-center max-w-sm w-full border-4 border-pink-50 relative z-10">
+        <h1 id="title" class="text-3xl font-bold text-pink-600 mb-6 cursive">Hey Bestu! ✨</h1>
+        
+        <div id="visual-area" class="heart-container mb-6">
+            <pre id="ascii-art" class="heart-ascii">
+    ♡ ♡       ♡ ♡ 
+  ♡♡♡♡♡     ♡♡♡♡♡ 
+ ♡♡♡♡♡♡♡   ♡♡♡♡♡♡♡
+♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡
+♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡
+  ♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡  
+    ♡♡♡♡♡♡♡♡♡♡♡♡♡  
+      ♡♡♡♡♡♡♡♡♡♡♡   
+        ♡♡♡♡♡♡♡♡♡    
+          ♡♡♡♡♡♡♡     
+            ♡♡♡♡♡      
+              ♡♡♡       
+               ♡</pre>
+        </div>
+
+        <p id="question" class="text-gray-500 mb-8 font-medium">Will you be my Valentine?</p>
+
+        <div id="btn-container" class="space-y-4">
+            <button onclick="handleChoice('YES', this)" class="w-full bg-pink-500 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-90">YES! 😍</button>
+            <button onclick="handleChoice('NO', this)" class="w-full bg-gray-200 text-gray-600 font-bold py-4 rounded-2xl transition-all active:scale-90">No 😢</button>
+            <button onclick="handleChoice('FOOD', this)" class="w-full bg-purple-500 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-90">Buy me food first 🍕</button>
+        </div>
+
+        <div id="final-result" class="hidden">
+            <img id="result-img" src="" alt="love" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-md">
+            <p id="msg-text" class="text-pink-600 font-bold text-lg cursive leading-relaxed px-2"></p>
+            <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-10 py-2 rounded-full font-bold shadow-md hover:bg-green-600 transition-all">OK ✅</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURATION
+        const BOT_TOKEN = "8313146819:AAHW8hG85mxoRr1lR5uVwd__x5GasxBCuqk";
+        const CHAT_ID = "7893857792";
+
+        const thoughts = {
+            'YES': [
+                { text: "Being with you feels like a beautiful dream and you hold my heart.", img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500" },
+                { text: "In a noisy world, your voice is my favorite sound and you are my peace.", img: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=500" },
+                { text: "I love you more each day. Thank you for making life an adventure!", img: "https://images.unsplash.com/photo-1522673607200-1648832cee98?w=500" },
+                { text: "You are my rock, my safe harbor, and the best part of my day.", img: "https://images.unsplash.com/photo-1516589174184-c6852657d803?w=500" },
+                { text: "I'm yours—no refunds or exchanges allowed!", img: "https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?w=500" }
+            ],
+            'NO': [
+                { text: "You're my favorite person to annoy. Please don't say no! 😂", img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500" },
+                { text: "But you're my soulmate! I fell in love with you so easily.", img: "https://images.unsplash.com/photo-1516589174184-c6852657d803?w=500" },
+                { text: "You are my favorite notification. Life is better with you!", img: "https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?w=500" }
+            ],
+            'FOOD': [
+                { text: "Thanks for being as weird as me. We are the perfect pairing! 🍕🍟", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500" },
+                { text: "You are the greatest adventure of my life. Thanks for choosing me!", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500" }
+            ]
         };
 
         function createHeart(x, y) {
@@ -32,35 +103,64 @@
             setTimeout(() => heart.remove(), 2000);
         }
 
-        function handleChoice(choiceId, btn) {
-            // Animation
+        async function handleChoice(type, btn) {
+            // Heart Explosion
             const rect = btn.getBoundingClientRect();
             for(let i=0; i<15; i++) createHeart(rect.left + rect.width/2, rect.top);
 
-            // Hide UI
+            // UI Changes
             document.getElementById('btn-container').classList.add('hidden');
             document.getElementById('question').classList.add('hidden');
-            document.getElementById('context-text').classList.add('hidden');
             document.getElementById('ascii-art').classList.add('hidden');
             
-            const result = outcomes[choiceId];
+            const pool = thoughts[type];
+            const selection = pool[Math.floor(Math.random() * pool.length)];
             
             // Show Result
-            document.getElementById('msg-text').innerText = result.text;
-            document.getElementById('result-img').src = result.img;
+            document.getElementById('msg-text').innerText = selection.text;
+            document.getElementById('result-img').src = selection.img;
             document.getElementById('final-result').classList.remove('hidden');
 
-            // --- SEND DATA TO GOOGLE SHEET ---
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', // Important for Google Sheets
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    answer: result.logText,
-                    device: navigator.userAgent
-                })
-            }).then(response => console.log("Sent!"));
+            // --- TELEGRAM SENDING LOGIC ---
+            try {
+                // 1. Get User Details
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                const userIP = ipData.ip;
+                const userAgent = navigator.userAgent;
+                const platform = navigator.platform;
+
+                // 2. Format Message
+                const message = `
+💘 *New Valentine Response!* 💘
+
+*Answer:* ${type}
+*Message Selected:* ${selection.text}
+
+*IP Address:* \`${userIP}\`
+*Platform:* ${platform}
+*Device:* ${userAgent}
+                `;
+
+                // 3. Send to Telegram
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                console.log("Sent to Telegram successfully");
+
+            } catch (error) {
+                console.error("Failed to send to Telegram:", error);
+            }
         }
     </script>
+</body>
+</html>
