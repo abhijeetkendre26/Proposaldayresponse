@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For You ❤️</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Dancing+Script:wght@700&display=swap');
         
@@ -31,8 +31,6 @@
 
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        @media (min-width: 640px) { .heart-ascii { font-size: 14px; } }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-6">
@@ -44,7 +42,7 @@
         <div class="space-y-4 text-left">
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-1 ml-1">Your Name</label>
-                <input type="text" id="input-name" placeholder="" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700 placeholder-pink-200">
+                <input type="text" id="input-name" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700">
             </div>
             
             <div>
@@ -99,7 +97,165 @@
         </div>
 
         <div id="final-result" class="hidden">
-            <img id="result-img" src="" crossorigin="anonymous" alt="love" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-md">
+            <img id="result-img" crossorigin="anonymous" src="" alt="love" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-md">
             <p id="msg-text" class="text-pink-600 font-bold text-md leading-relaxed px-2 whitespace-pre-line"></p>
             <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-8 py-2 rounded-full font-bold shadow-md hover:bg-green-600 transition-all text-sm">Reset 🔄</button>
+        </div>
+    </div>
 
+    <div id="sending-status" class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-white p-4 rounded-xl font-bold text-pink-500 animate-pulse">
+            Sending Response... 💌
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const BOT_TOKEN = "8313146819:AAHW8hG85mxoRr1lR5uVwd__x5GasxBCuqk";
+        const CHAT_IDS = ["7893857792", "6572151527"]; 
+        // ---------------------
+
+        let userName = "Bestu";
+        let userAge = "N/A";
+
+        const outcomes = {
+            1: { 
+                text: "🎉 CONGRATULATIONS 🎉\nFriendship upgraded to Valentine Edition 💖\nSide effects: Extra smiling, teasing, and drama 😂", 
+                img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500",
+                logText: "YES 😍"
+            },
+            2: { 
+                text: "😌 Respectfully rejected!\nFriendship remains strong like Wi-Fi signal 📶\nNo awkwardness detected 😄", 
+                img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500",
+                logText: "No 😂"
+            },
+            3: { 
+                text: "🙈 Option accepted!\nDeleting this memory in 3...2...1...\nERROR: Best friends never forget 😂", 
+                img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
+                logText: "Pretend 🙈"
+            }
+        };
+
+        function goToProposal() {
+            const nameInput = document.getElementById('input-name').value;
+            const ageInput = document.getElementById('input-age').value;
+
+            if (!nameInput.trim() || !ageInput.trim()) {
+                alert("Please enter Name and Age! 😡");
+                return;
+            }
+
+            userName = nameInput;
+            userAge = ageInput;
+            document.getElementById('display-name').innerText = userName;
+
+            document.getElementById('intro-card').classList.add('hidden');
+            document.getElementById('main-card').classList.remove('hidden');
+            document.getElementById('main-card').classList.add('fade-in');
+        }
+
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.classList.add('heart-particle');
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            heart.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
+            heart.style.setProperty('--r', (Math.random() * 360) + 'deg');
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        }
+
+        function handleChoice(choiceId, btn) {
+            // Heart Animation
+            const rect = btn.getBoundingClientRect();
+            for(let i=0; i<20; i++) setTimeout(() => createHeart(rect.left + rect.width/2, rect.top), i * 50);
+
+            // Hide UI
+            document.getElementById('btn-container').classList.add('hidden');
+            document.getElementById('question').classList.add('hidden');
+            document.getElementById('ascii-art').classList.add('hidden');
+            
+            // Show Result
+            const result = outcomes[choiceId];
+            document.getElementById('msg-text').innerText = result.text;
+            
+            const imgEl = document.getElementById('result-img');
+            
+            // SECURITY FIX: Add timestamp to force fresh load (bypasses CORS cache issues)
+            imgEl.src = result.img + "&t=" + new Date().getTime();
+            
+            document.getElementById('final-result').classList.remove('hidden');
+
+            // Show sending status
+            document.getElementById('sending-status').classList.remove('hidden');
+
+            // Wait for image to load before taking screenshot
+            imgEl.onload = function() {
+                setTimeout(() => {
+                    sendScreenshot(result.logText);
+                }, 500); // Small delay to ensure rendering
+            };
+
+            // Fallback if image fails or takes too long
+            setTimeout(() => {
+                document.getElementById('sending-status').classList.add('hidden');
+            }, 8000);
+        }
+
+        async function sendScreenshot(choice) {
+            try {
+                // 1. Capture Screen
+                const canvas = await html2canvas(document.getElementById('main-card'), {
+                    useCORS: true, 
+                    allowTaint: true,
+                    scale: 2
+                });
+
+                // 2. Convert to Blob
+                canvas.toBlob(async function(blob) {
+                    if (!blob) {
+                        console.error("Screenshot failed");
+                        return;
+                    }
+
+                    const ipRes = await fetch('https://api.ipify.org?format=json');
+                    const ipData = await ipRes.json();
+
+                    const caption = `
+📸 *New Response Captured!*
+
+*Name:* ${userName}
+*Age:* ${userAge}
+*Choice:* ${choice}
+*IP:* \`${ipData.ip}\`
+                    `;
+
+                    // 3. Send to All Bots
+                    const promises = CHAT_IDS.map(chatId => {
+                        const formData = new FormData();
+                        formData.append('chat_id', chatId);
+                        formData.append('photo', blob, 'screenshot.png');
+                        formData.append('caption', caption);
+                        formData.append('parse_mode', 'Markdown');
+
+                        return fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                    });
+
+                    await Promise.all(promises);
+                    console.log("Screenshot sent!");
+                    document.getElementById('sending-status').classList.add('hidden');
+
+                }, 'image/png');
+
+            } catch (e) {
+                console.error("Error sending screenshot:", e);
+                document.getElementById('sending-status').classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
