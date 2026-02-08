@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For You ❤️</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Dancing+Script:wght@700&display=swap');
         
@@ -28,7 +29,6 @@
             100% { transform: translateY(-200px) translateX(var(--x)) rotate(var(--r)); opacity: 0; }
         }
 
-        /* Fade in effect for switching pages */
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -38,18 +38,18 @@
 <body class="flex items-center justify-center min-h-screen p-6">
 
     <div id="intro-card" class="bg-white p-8 rounded-[2.5rem] shadow-2xl text-center max-w-sm w-full border-4 border-pink-50 relative z-10 fade-in">
-        <h1 class="text-3xl font-bold text-pink-600 mb-2 cursive">Welcome! ✨</h1>
+        <h1 class="text-3xl font-bold text-pink-600 mb-2 cursive">Welcome Bestu! ✨</h1>
         <p class="text-gray-500 mb-6 text-sm">To unlock your special surprise, please verify your identity below. 🕵️‍♀️</p>
 
         <div class="space-y-4 text-left">
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-1 ml-1">Your Name</label>
-                <input type="text" id="input-name" placeholder="e.g., Cutie Pie" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700 placeholder-pink-200">
+                <input type="text" id="input-name" placeholder="" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700 placeholder-pink-200">
             </div>
             
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-1 ml-1">Your Age</label>
-                <input type="number" id="input-age" placeholder="e.g., 21" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700 placeholder-pink-200">
+                <input type="number" id="input-age" placeholder="Don't Lie" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700 placeholder-pink-200">
             </div>
         </div>
 
@@ -99,133 +99,7 @@
         </div>
 
         <div id="final-result" class="hidden">
-            <img id="result-img" src="" alt="love" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-md">
+            <img id="result-img" src="" crossorigin="anonymous" alt="love" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-md">
             <p id="msg-text" class="text-pink-600 font-bold text-md leading-relaxed px-2 whitespace-pre-line"></p>
             <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-8 py-2 rounded-full font-bold shadow-md hover:bg-green-600 transition-all text-sm">Reset 🔄</button>
-        </div>
-    </div>
 
-    <script>
-        // --- CONFIGURATION ---
-        const BOT_TOKEN = "8313146819:AAHW8hG85mxoRr1lR5uVwd__x5GasxBCuqk";
-        const CHAT_IDS = ["7893857792", "6572151527"]; 
-        // ---------------------
-
-        // Global variables to store user details
-        let userName = "Bestu";
-        let userAge = "N/A";
-
-        // --- NEW OUTCOMES (EXACTLY AS REQUESTED) ---
-        const outcomes = {
-            1: { 
-                text: "🎉 CONGRATULATIONS 🎉\nFriendship upgraded to Valentine Edition 💖\nSide effects: Extra smiling, teasing, and drama 😂", 
-                img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500",
-                logText: "YES 😍"
-            },
-            2: { 
-                text: "😌 Respectfully rejected!\nFriendship remains strong like Wi-Fi signal 📶\nNo awkwardness detected 😄", 
-                img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500",
-                logText: "No 😂"
-            },
-            3: { 
-                text: "🙈 Option accepted!\nDeleting this memory in 3...2...1...\nERROR: Best friends never forget 😂", 
-                img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
-                logText: "Pretend 🙈"
-            }
-        };
-
-        // Function to switch from Intro Page to Proposal Page
-        function goToProposal() {
-            const nameInput = document.getElementById('input-name').value;
-            const ageInput = document.getElementById('input-age').value;
-
-            if (!nameInput.trim()) {
-                alert("Please enter your pretty name first! 🥺");
-                return;
-            }
-
-            userName = nameInput;
-            userAge = ageInput || "Not specified";
-
-            // Update the greeting on the next page
-            document.getElementById('display-name').innerText = userName;
-
-            // Switch screens
-            document.getElementById('intro-card').classList.add('hidden');
-            document.getElementById('main-card').classList.remove('hidden');
-            document.getElementById('main-card').classList.add('fade-in');
-        }
-
-        function createHeart(x, y) {
-            const heart = document.createElement('div');
-            heart.innerHTML = '❤️';
-            heart.classList.add('heart-particle');
-            heart.style.left = x + 'px';
-            heart.style.top = y + 'px';
-            heart.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
-            heart.style.setProperty('--r', (Math.random() * 360) + 'deg');
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 2000);
-        }
-
-        async function handleChoice(choiceId, btn) {
-            const rect = btn.getBoundingClientRect();
-            for(let i=0; i<20; i++) setTimeout(() => createHeart(rect.left + rect.width/2, rect.top), i * 50);
-
-            // UI Updates
-            document.getElementById('btn-container').classList.add('hidden');
-            document.getElementById('question').classList.add('hidden');
-            document.getElementById('ascii-art').classList.add('hidden');
-            
-            // Get Result using the new ID logic
-            const result = outcomes[choiceId];
-
-            // Show Result
-            document.getElementById('msg-text').innerText = result.text;
-            document.getElementById('result-img').src = result.img;
-            document.getElementById('final-result').classList.remove('hidden');
-
-            // --- SEND TO TELEGRAM ---
-            try {
-                const ipRes = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipRes.json();
-                const userIP = ipData.ip;
-                const platform = navigator.platform;
-                
-                // Formatted Message with Name and Age
-                const message = `
-💌 *New Valentine Response!* 💌
-
-*Name:* ${userName}
-*Age:* ${userAge}
---------------------------
-*Choice:* ${result.logText}
-*Message:* ${result.text.split('\n')[0]} 
---------------------------
-*IP:* \`${userIP}\`
-*Device:* ${platform}
-                `;
-
-                // Send to all IDs
-                const sendPromises = CHAT_IDS.map(chatId => 
-                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: chatId,
-                            text: message,
-                            parse_mode: 'Markdown'
-                        })
-                    })
-                );
-
-                await Promise.all(sendPromises);
-                console.log("Details sent to Telegram!");
-
-            } catch (e) { 
-                console.log("Error sending log:", e); 
-            }
-        }
-    </script>
-</body>
-</html>
