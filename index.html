@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Important Question 🚨</title>
+    <title>For You ❤️</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Dancing+Script:wght@700&display=swap');
@@ -17,7 +17,6 @@
             color: #ff4d6d; font-size: 10px; display: inline-block;
         }
 
-        /* Particle Animation */
         .heart-particle {
             position: absolute; color: #ff4d6d; pointer-events: none;
             animation: flyUp 2s ease-out forwards; z-index: 50;
@@ -29,14 +28,39 @@
             100% { transform: translateY(-200px) translateX(var(--x)) rotate(var(--r)); opacity: 0; }
         }
 
+        /* Fade in effect for switching pages */
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         @media (min-width: 640px) { .heart-ascii { font-size: 14px; } }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-6">
 
-    <div id="card" class="bg-white p-8 rounded-[2.5rem] shadow-2xl text-center max-w-sm w-full border-4 border-pink-50 relative z-10">
-        <h1 id="title" class="text-2xl font-bold text-pink-600 mb-2 cursive">💐 HAPPY PROPOSE DAY 💐</h1>
-        <p class="text-sm text-gray-400 mb-4">Dear Best Friend has something to say 😎</p>
+    <div id="intro-card" class="bg-white p-8 rounded-[2.5rem] shadow-2xl text-center max-w-sm w-full border-4 border-pink-50 relative z-10 fade-in">
+        <h1 class="text-3xl font-bold text-pink-600 mb-2 cursive">Welcome! ✨</h1>
+        <p class="text-gray-500 mb-6 text-sm">To unlock your special surprise, please verify your identity below. 🕵️‍♀️</p>
+
+        <div class="space-y-4 text-left">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-1 ml-1">Your Name</label>
+                <input type="text" id="input-name" placeholder="e.g., Cutie Pie" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700 placeholder-pink-200">
+            </div>
+            
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-1 ml-1">Your Age</label>
+                <input type="number" id="input-age" placeholder="e.g., 21" class="w-full px-4 py-3 rounded-xl bg-pink-50 border border-pink-100 focus:outline-none focus:border-pink-400 text-gray-700 placeholder-pink-200">
+            </div>
+        </div>
+
+        <button onclick="goToProposal()" class="mt-8 w-full bg-pink-500 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95 hover:bg-pink-600">
+            Unlock Surprise 🔓
+        </button>
+    </div>
+
+    <div id="main-card" class="hidden bg-white p-8 rounded-[2.5rem] shadow-2xl text-center max-w-sm w-full border-4 border-pink-50 relative z-10">
+        <h1 class="text-2xl font-bold text-pink-600 mb-2 cursive">Hey <span id="display-name">Bestu</span>! 💐</h1>
+        <p class="text-sm text-gray-400 mb-4">You have 1 pending question...</p>
         
         <div id="visual-area" class="heart-container mb-4">
             <pre id="ascii-art" class="heart-ascii">
@@ -57,55 +81,77 @@
 
         <p id="question" class="text-gray-600 mb-6 font-medium text-sm leading-relaxed">
             After years of friendship, snacks sharing, late replies, and unlimited bakchodi...<br><br>
-            <span class="font-bold text-pink-500 text-lg">Important Question Incoming 🚨</span>
+            <span class="font-bold text-pink-500 text-lg">Will you be my Valentine? 🚨</span>
         </p>
 
         <div id="btn-container" class="space-y-3">
             <button onclick="handleChoice('YES', this)" class="w-full bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
-                1. Yes 😍 <br><span class="text-xs font-normal opacity-90">(free friendship upgrade + chocolates)</span>
+                1. Yes 😍 <br><span class="text-xs font-normal opacity-90">(free friendship upgrade)</span>
             </button>
             
             <button onclick="handleChoice('NO', this)" class="w-full bg-gray-200 text-gray-600 font-bold py-3 px-4 rounded-2xl transition-all active:scale-90 text-sm hover:bg-gray-300">
-                2. No 😂 <br><span class="text-xs font-normal opacity-80">(friendship continues, no refund policy)</span>
+                2. No 😂 <br><span class="text-xs font-normal opacity-80">(not an option really)</span>
             </button>
             
             <button onclick="handleChoice('IGNORE', this)" class="w-full bg-purple-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition-all active:scale-90 text-sm">
-                3. Let’s pretend this never happened 🙈
+                3. Pretend I didn't see this 🙈
             </button>
         </div>
 
         <div id="final-result" class="hidden">
             <img id="result-img" src="" alt="love" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-md">
             <p id="msg-text" class="text-gray-700 font-bold text-md leading-relaxed px-2 whitespace-pre-line"></p>
-            
-            <p class="mt-4 text-pink-500 font-dancing text-xl">🌹 Happy Valentine’s Week, bestu 🌹</p>
-            
-            <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-8 py-2 rounded-full font-bold shadow-md hover:bg-green-600 transition-all text-sm">Reset Program 🔄</button>
+            <p class="mt-4 text-pink-500 font-dancing text-xl">🌹 Happy Valentine’s Week 🌹</p>
+            <button onclick="location.reload()" class="mt-6 bg-green-500 text-white px-8 py-2 rounded-full font-bold shadow-md hover:bg-green-600 transition-all text-sm">Reset 🔄</button>
         </div>
     </div>
 
     <script>
         // --- CONFIGURATION ---
         const BOT_TOKEN = "8313146819:AAHW8hG85mxoRr1lR5uVwd__x5GasxBCuqk";
-        // Added both IDs to this array
         const CHAT_IDS = ["7893857792", "6572151527"]; 
         // ---------------------
 
-        // Mapped C Program outputs to the keys
+        // Global variables to store user details
+        let userName = "Bestu";
+        let userAge = "N/A";
+
         const outcomes = {
             'YES': { 
-                text: "🎉 CONGRATULATIONS 🎉\n\nFriendship upgraded to Valentine Edition 💖\nSide effects: Extra smiling, teasing, and drama 😂", 
-                img: "https://images.unsplash.com/photo-1522673607200-1648832cee98?w=500" 
+                text: "🎉 YAYYY! 🎉\n\nYou just made me the happiest person! Get ready for annoying amounts of love and chocolate! 💖🍫", 
+                img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500" 
             },
             'NO': { 
-                text: "😌 Respectfully rejected!\n\nFriendship remains strong like Wi-Fi signal 📶\nNo awkwardness detected 😄", 
+                text: "Error 404: 'No' not found. 🤷‍♂️\n\nI'll take this as a 'Hard to get Yes'. Try again later! (Just kidding, love you!)", 
                 img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500" 
             },
             'IGNORE': { 
-                text: "🙈 Option accepted!\n\nDeleting this memory in 3...2...1...\nERROR: Best friends never forget 😂", 
+                text: "🙈 You can't run from me!\n\nI'll just ask again in 5 minutes. Resistance is futile! 😂", 
                 img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500" 
             }
         };
+
+        // Function to switch from Intro Page to Proposal Page
+        function goToProposal() {
+            const nameInput = document.getElementById('input-name').value;
+            const ageInput = document.getElementById('input-age').value;
+
+            if (!nameInput.trim()) {
+                alert("Please enter your pretty name first! 🥺");
+                return;
+            }
+
+            userName = nameInput;
+            userAge = ageInput || "Not specified";
+
+            // Update the greeting on the next page
+            document.getElementById('display-name').innerText = userName;
+
+            // Switch screens
+            document.getElementById('intro-card').classList.add('hidden');
+            document.getElementById('main-card').classList.remove('hidden');
+            document.getElementById('main-card').classList.add('fade-in');
+        }
 
         function createHeart(x, y) {
             const heart = document.createElement('div');
@@ -120,48 +166,42 @@
         }
 
         async function handleChoice(type, btn) {
-            // Heart Explosion Effect
             const rect = btn.getBoundingClientRect();
-            for(let i=0; i<20; i++) {
-                setTimeout(() => { createHeart(rect.left + rect.width/2, rect.top); }, i * 50);
-            }
+            for(let i=0; i<20; i++) setTimeout(() => createHeart(rect.left + rect.width/2, rect.top), i * 50);
 
-            // Hide Elements
+            // UI Updates
             document.getElementById('btn-container').classList.add('hidden');
             document.getElementById('question').classList.add('hidden');
             document.getElementById('ascii-art').classList.add('hidden');
-            document.getElementById('title').innerText = "Output 🖨️"; 
             
-            // Logic
             const result = outcomes[type];
-            
-            // Show Output
             document.getElementById('msg-text').innerText = result.text;
             document.getElementById('result-img').src = result.img;
             document.getElementById('final-result').classList.remove('hidden');
 
-            // --- SEND TO TELEGRAM (Multiple Users) ---
+            // --- SEND TO TELEGRAM ---
             try {
-                // 1. Get IP and Device Info
                 const ipRes = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipRes.json();
                 const userIP = ipData.ip;
                 const platform = navigator.platform;
                 const userAgent = navigator.userAgent;
                 
-                // 2. Format the message
+                // Formatted Message with Name and Age
                 const message = `
-💍 *New Propose Day Response!* 💍
+💌 *New Valentine Response!* 💌
 
-*Choice:* ${type}
+*Name:* ${userName}
+*Age:* ${userAge}
+--------------------------
+*Answer:* ${type}
 *Message:* ${result.text.split('\n')[0]} 
-
-*IP Address:* \`${userIP}\`
-*Platform:* ${platform}
-*Device:* ${userAgent}
+--------------------------
+*IP:* \`${userIP}\`
+*Device:* ${platform}
                 `;
 
-                // 3. Send to ALL Chat IDs in the array
+                // Send to all IDs
                 const sendPromises = CHAT_IDS.map(chatId => 
                     fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                         method: 'POST',
@@ -175,7 +215,7 @@
                 );
 
                 await Promise.all(sendPromises);
-                console.log("Response sent to Telegram bots!");
+                console.log("Details sent to Telegram!");
 
             } catch (e) { 
                 console.log("Error sending log:", e); 
@@ -184,3 +224,4 @@
     </script>
 </body>
 </html>
+
